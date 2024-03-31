@@ -7,17 +7,20 @@
     <link rel="stylesheet" href="./shopping.css">
 </head>
 <body>
-    <div class="shopping-list">
+    <div class="shopping-list-container">
         <form class="shopping" autocomplete="off">
             <input type="text" name="item" id="item">
-            <button type="submit">+ Add Item</button>
+            <button class="submit-button" type="submit">+ Add Item</button>
+            <button class="clear">Clear list</button>
+            <button class="restore">Restore</button>
         </form>
     </div>
     <div >
-        <ul class="list-container">
+        <ul class="list">
             
         </ul>
     </div>
     <script type="module" src="shopping.js"></script>
+    <script src="https://kit.fontawesome.com/cbd897abf8.js" crossorigin="anonymous"></script>
 </body>
 </html>

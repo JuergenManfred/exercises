@@ -1,3 +1,43 @@
-.list-container {
-    list-style-type: none;
+.shopping-list-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10%;
+}
+.list {
+  list-style-type: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 1%;
+  line-height: 2;
+  position: relative;
+}
+
+.checkbox {
+  position: absolute;
+  border-radius: 7px;
+  left: 15%;
+}
+
+.list-button {
+  background-color: lightgrey;
+  border: none;
+  border-radius: 7px;
+  position: absolute;
+  right: 15%;
+}
+
+.item-text {
+  font-size: 1.3rem;
 }

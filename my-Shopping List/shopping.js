@@ -1,7 +1,8 @@
+
 const shoppingForm = document.querySelector(".shopping");
 const inputElement = document.querySelector("#item");
 const formButton = document.querySelector("button");
-const listElement = document.querySelector(".list-container");
+const listElement = document.querySelector(".list");
 
 let itemsArray = [];
 function eventHandler(event) {
@@ -20,12 +21,14 @@ function eventHandler(event) {
 function displayInput() {
   const html = itemsArray
     .map((item) => {
-      return `<li id="${item.id}">
-    <input type="checkbox" value="${item.id}" ${
+      return `<li class="list-item" id="${item.id}">
+    <input class="checkbox" type="checkbox" value="${item.id}" ${
         item.checked && "checked"
       }></input>
-    <span>${item.name}</span>
-    <button value="${item.id}"></button>
+    <span class="item-text">${item.name}</span>
+    <button class="list-button" value="${
+      item.id
+    }"><i class="fa-solid fa-trash"></i></button>
     </li>
     `;
     })
@@ -38,7 +41,7 @@ function updateLocalStorage() {
 }
 function getLocalStorage() {
   let storage = localStorage.getItem("items");
-  if (localStorage.getItem("items") != null) {
+  if (localStorage.getItem("items") != undefined) {
     storage = JSON.parse(localStorage.getItem("items"));
     itemsArray.push(...storage);
   }
@@ -46,6 +49,7 @@ function getLocalStorage() {
 }
 
 function deleteItem(id) {
+  saveOneItemBeforeDelete(id)
   itemsArray = itemsArray.filter((item) => {
     return item.id !== id;
   });
@@ -74,11 +78,52 @@ shoppingForm.addEventListener("submit", eventHandler);
 listElement.addEventListener("itemsUpdated", displayInput);
 listElement.addEventListener("itemsUpdated", updateLocalStorage);
 function handleListClick(e) {
-  const id = parseInt(e.target.value);
+  let id = parseInt(e.target.value);
   if (e.target.matches("button")) {
+    deleteItem(id);
+  } else if (e.target.matches(".list-button i")) {
+    id = parseInt(e.target.parentElement.value);
     deleteItem(id);
   } else if (e.target.matches('input[type="checkbox"]')) {
     checkmark(id);
   }
 }
 getLocalStorage();
+function askUser() {
+  let answer = confirm("Would you like to clear all items?");
+  if (answer) {
+    saveListBeforeClear();
+    itemsArray = [];
+    listElement.dispatchEvent(new CustomEvent("itemsUpdated"));
+  }
+}
+const clearButton = document.querySelector(".clear");
+clearButton.addEventListener("click", askUser);
+
+function saveListBeforeClear() {
+  let jsonArray = JSON.stringify(itemsArray);
+  localStorage.setItem("history", jsonArray);
+}
+function saveOneItemBeforeDelete(id) {
+  let ref = itemsArray.find((item) => item.id === id);
+  let jsonArray = JSON.stringify(ref);
+  localStorage.setItem("history", jsonArray);
+}
+function restoreHistory() {
+  let storage = localStorage.getItem("history");
+  if (localStorage.getItem("history") != null) {
+    let jsonStorage = JSON.parse(storage)
+    if(jsonStorage.length > 1) {
+      itemsArray.push(...jsonStorage);
+    }
+    else {
+      itemsArray.push(jsonStorage);
+    }
+    localStorage.setItem("history", "")
+  }
+  listElement.dispatchEvent(new CustomEvent("itemsUpdated"));
+}
+const restoreButton = document.querySelector(".restore");
+restoreButton.addEventListener("click", restoreHistory);
+
+
