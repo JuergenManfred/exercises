@@ -71,6 +71,18 @@ function checkmark(id) {
   }); */
   let ref = itemsArray.find((item) => item.id === id);
   ref.checked = !ref.checked;
+  const listItem = document.getElementById(id);
+  console.log(listItem)
+/*   if (listItem) {
+    if (ref.checked) {
+      listItem.style.backgroundColor = "grey"
+    } 
+  } */
+  
+  if (listItem) {
+    listItem.classList.toggle('checked', ref.checked);
+  }
+  
   listElement.dispatchEvent(new CustomEvent("itemsUpdated"));
 }
 listElement.addEventListener("click", handleListClick);
@@ -88,7 +100,6 @@ function handleListClick(e) {
     checkmark(id);
   }
 }
-getLocalStorage();
 function askUser() {
   let answer = confirm("Would you like to clear all items?");
   if (answer) {
@@ -127,3 +138,20 @@ const restoreButton = document.querySelector(".restore");
 restoreButton.addEventListener("click", restoreHistory);
 
 
+function handleCheckboxChange(event) {
+  const checkbox = event.target;
+  console.log(checkbox)
+  const listItem = checkbox.closest('.list-item');
+  if (listItem) {
+    if (checkbox.checked) {
+      listItem.classList.add('checked');
+    } else {
+      listItem.classList.remove('checked');
+    }
+  }
+}
+
+listElement.addEventListener('change', handleCheckboxChange);
+
+
+getLocalStorage();
